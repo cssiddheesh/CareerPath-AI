@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Student Profile{% endblock %}{% block content %}
+<div class="pagehead"><div class="pill">Step 1 of 2</div><h1>Tell us about yourself</h1><p>There are no right or wrong answers. Your responses help us understand your interests.</p></div>
+<form id="profileForm" class="formgrid">
+<label>Name<input name="name" required placeholder="Your name"></label><label>Age<input name="age" type="number" min="10" max="30"></label>
+<label>Class / Grade<select name="grade"><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>College</option></select></label>
+<label>Favourite subjects<input name="subjects" placeholder="e.g. Maths, Computer Science"></label>
+<label>Areas of interest<input name="interests" placeholder="e.g. technology, medicine, art"></label>
+<label>Hobbies<input name="hobbies" placeholder="e.g. coding, drawing, sports"></label>
+<label>Skills<input name="skills" placeholder="e.g. communication, Python, teamwork"></label>
+<label>Strengths<input name="strengths" placeholder="e.g. problem solving, creativity"></label>
+<label>Preferred work style<select name="work_style"><option>Working independently</option><option>Working with a team</option><option>A mix of both</option><option>Helping people directly</option></select></label>
+<label class="full">Career goals<textarea name="goals" placeholder="What would you like to achieve in the future?"></textarea></label>
+<div class="full"><button class="btn primary" type="submit">Continue to Assessment →</button></div></form>
+{% endblock %}{% block scripts %}<script>
+document.getElementById('profileForm').onsubmit=async e=>{e.preventDefault();let d=Object.fromEntries(new FormData(e.target));await fetch('/api/profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});location='/assessment'}
+</script>{% endblock %}

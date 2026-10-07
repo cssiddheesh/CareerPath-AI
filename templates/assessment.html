@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Assessment{% endblock %}{% block content %}
+<div class="pagehead"><div class="pill">Step 2 of 2</div><h1>Career Discovery Assessment</h1><p>Rate each statement from 1 (not like me) to 5 (very much like me).</p></div>
+<form id="assessmentForm" class="questions"></form><button id="submitAssessment" class="btn primary">See My Career Matches →</button>
+<div id="loading" class="loading hidden">Analysing your responses…</div>
+{% endblock %}{% block scripts %}<script>
+const qs=[
+["technology","I enjoy using computers, digital tools or technology."],["logical","I enjoy solving logical or mathematical problems."],
+["problem","I like finding solutions when something is difficult."],["creativity","I enjoy creating, designing, drawing, writing or imagining new ideas."],
+["communication","I enjoy explaining ideas and communicating with others."],["leadership","I like taking responsibility and organising people or activities."],
+["social","I enjoy helping people or contributing to my community."],["science","I enjoy learning how the natural world, health or science works."],
+["empathy","I am a good listener and care about how other people feel."],["math","I am comfortable working with numbers and patterns."],
+["business","I am interested in business, money, markets or starting projects."],["team","I enjoy collaborating with a team."],
+["research","I enjoy asking questions and researching answers."],["attention","I notice small details and like accurate work."],["adventure","I enjoy trying new challenges and learning from mistakes."]
+];
+const f=document.getElementById('assessmentForm');
+qs.forEach(([k,q],i)=>f.innerHTML+=`<div class="question"><b>${i+1}. ${q}</b><div class="scale">${[1,2,3,4,5].map(n=>`<label><input required type="radio" name="${k}" value="${n}"><span>${n}</span></label>`).join('')}</div></div>`);
+document.getElementById('submitAssessment').onclick=async()=>{
+ if(!f.checkValidity()){f.reportValidity();return}
+ const d=Object.fromEntries(new FormData(f)); document.getElementById('loading').classList.remove('hidden');
+ const r=await fetch('/api/assess',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}); const x=await r.json(); localStorage.setItem('careerResults',JSON.stringify(x)); location='/dashboard';
+};
+</script>{% endblock %}

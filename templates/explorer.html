@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}Career Explorer{% endblock %}{% block content %}
+<div class="pagehead"><div class="pill">Explore possibilities</div><h1>Career Explorer</h1><p>Search careers, skills, subjects and pathways.</p><input id="search" class="search" placeholder="🔎 Search careers…"></div>
+<div id="careerGrid" class="careergrid">{% for c in careers %}<article class="career" data-search="{{ (c.name+' '+c.desc+' '+' '.join(c.skills)+' '+' '.join(c.subjects))|lower }}"><div class="icon">{{c.icon}}</div><h3>{{c.name}}</h3><p>{{c.desc}}</p><div class="tags">{% for s in c.skills[:3] %}<span>{{s}}</span>{% endfor %}</div><button class="textbtn" onclick='showCareer({{c|tojson}})'>View pathway →</button></article>{% endfor %}</div>
+<div id="modal" class="modal hidden"><div class="modalbox"><button class="close" onclick="document.getElementById('modal').classList.add('hidden')">×</button><div id="modalcontent"></div></div></div>
+{% endblock %}{% block scripts %}<script>
+document.getElementById('search').oninput=e=>{let q=e.target.value.toLowerCase();document.querySelectorAll('.career').forEach(x=>x.style.display=x.dataset.search.includes(q)?'block':'none')};
+function showCareer(c){document.getElementById('modalcontent').innerHTML=`<div class="icon">${c.icon}</div><h2>${c.name}</h2><p>${c.desc}</p><h4>Skills</h4><p>${c.skills.join(' • ')}</p><h4>Subjects</h4><p>${c.subjects.join(' • ')}</p><h4>Courses / Degrees</h4><p>${c.courses.join('<br>')}</p><h4>Future opportunities</h4><p>${c.future}</p><h4>Job roles</h4><p>${c.jobs.join(' • ')}</p>`;document.getElementById('modal').classList.remove('hidden')}
+</script>{% endblock %}
